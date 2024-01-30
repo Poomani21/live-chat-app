@@ -27,6 +27,6 @@ Route::middleware(['auth', 'role:customer'])->group(function () {
 });
 
 Route::middleware(['auth', 'role:support_agent'])->group(function () {
-    Route::get('/view-chats', [ChatController::class, 'viewChats'])->name('view-chats');
+    Route::get('/view-chats/{id}', [ChatController::class, 'viewChats'])->name('view-chats');
     Route::post('/respond-to-chat', [ChatController::class, 'respondToChat'])->name('respond-to-chat');
 });
