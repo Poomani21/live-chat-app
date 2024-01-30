@@ -17,7 +17,11 @@
                     <a href="{{ route('initiateChat') }}" title="Cutomer Chat" class="btn btn-warning btn-sm"><i aria-hidden="true" class="fa fa-arrow-left"></i> Click here to Cutomer Chat</a>
                     @endif
                     @if(auth()->user()->role == "support_agent")
-                    <a href="{{ route('view-chats') }}" title="Support Agent" class="btn btn-warning btn-sm"><i aria-hidden="true" class="fa fa-arrow-left"></i> Click here to Support Agent</a>
+                    @forelse ($customers as $user)
+                    <a href="{{ route('view-chats', ['id' => $user->user_id]) }}" title="Support Agent" class="btn btn-warning btn-sm"><i aria-hidden="true" class="fa fa-arrow-left"></i>{{$user->user->name}}</a>
+                    @empty
+                        <p>No customers</p>
+                    @endforelse
                     @endif
                 </div>
             </div>

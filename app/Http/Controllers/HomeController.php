@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Message;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -23,6 +25,8 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $usersWithSupportAgentRole = User::where('role', 'support_agent')->first();
+        $customers = Message::with('user')->where('user_id','<>',$usersWithSupportAgentRole->id)->get();
+        return view('home',compact('customers'));
     }
 }
