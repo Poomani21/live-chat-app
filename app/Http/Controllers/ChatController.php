@@ -18,14 +18,14 @@ public function __construct()
 }
 public function initiateChat()
     {
-        // Logic for initiating a chat
+       
         $usersWithSupportAgentRole = User::where('role', 'support_agent')->first();
         $customer_id = $usersWithSupportAgentRole->id;
         $customer = Message::where(function ($query) use ($customer_id) {
-            $query->where('user_id', auth()->user()->id) // Messages sent by the agent
+            $query->where('user_id', auth()->user()->id) 
                 ->where('receiver_id', $customer_id);
         })->orWhere(function ($query) use ($customer_id) {
-            $query->where('user_id', $customer_id) // Messages sent by the customer
+            $query->where('user_id', $customer_id) 
                 ->where('receiver_id', auth()->user()->id);
         })->get();
         return view('customer.chat',compact('customer'));
@@ -35,13 +35,13 @@ public function initiateChat()
     {
         $user = auth()->user();
     
-        // Validate the request
+       
         $request->validate([
             'message' => 'required|string',
         ]);
         $usersWithSupportAgentRole = User::where('role', 'support_agent')->first();
     
-        // Save the message to the database
+       
         $message = new Message([
             'user_id' => $user->id,
             'text' => $request->input('message'),
@@ -49,7 +49,7 @@ public function initiateChat()
         ]);
         $message->save();
     
-        // Broadcast the new message
+        
         broadcast(new NewMessageEvent($message,$user));
     
         return redirect('/initiate-chat');
@@ -57,16 +57,16 @@ public function initiateChat()
 
     public function viewChats($selectedCustomerId)
     {
-        // Logic for support agent to view incoming chats
+        
         $usersWithSupportAgentRole = User::where('role', 'support_agent')->first();
         $userId = auth()->user()->id;
-        $customer_id = $selectedCustomerId; // Replace this with the ID of the customer you're selecting
+        $customer_id = $selectedCustomerId; 
 
         $customer = Message::where(function ($query) use ($customer_id) {
-            $query->where('user_id', auth()->user()->id) // Messages sent by the agent
+            $query->where('user_id', auth()->user()->id) 
                 ->where('receiver_id', $customer_id);
         })->orWhere(function ($query) use ($customer_id) {
-            $query->where('user_id', $customer_id) // Messages sent by the customer
+            $query->where('user_id', $customer_id) 
                 ->where('receiver_id', auth()->user()->id);
         })->get();
 
@@ -77,8 +77,7 @@ public function initiateChat()
 
     public function respondToChat(Request $request)
     {
-        // Logic for support agent to respond to a chat
-        // Save the response to the database, broadcast it, etc.
+       
         $user = auth()->user();
 
         $message = new Message([
